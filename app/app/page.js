@@ -1,10 +1,13 @@
 import React from "react";
 import ProductCollection from "@/app/components/ProductCollection";
-import FeatureSection from "@/app/components/FeatureSection";
+import Pagination from "@/app/components/Pagination";
 const HomePage = () => {
   return (
-    <div>
+    <div style={{ backgroundColor: "#FFFFFF" }}>
       <ProductCollection />
+      <div className="flex w-full justify-center py-10">
+        <Pagination />
+      </div>
     </div>
   );
 };
