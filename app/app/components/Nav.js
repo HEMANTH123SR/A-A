@@ -6,7 +6,7 @@ const Nav = () => {
       className="bg-white "
       style={{
         borderBottom: "2px",
-        borderBottomColor: "",
+        borderBottomColor: "#0D9488",
         borderStyle: "solid",
       }}
     >
