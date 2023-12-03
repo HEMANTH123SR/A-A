@@ -1,6 +1,21 @@
 "use client";
+import { googleOauthSession, getAccountDetails } from "@/app/appwrite/appwrite";
+import { FaGoogle, FaShoppingCart } from "react-icons/fa";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
 const Nav = () => {
+  const [accountDetails, setAccountDetails] = useState({});
+  const handleGoogleSignIn = async () => {
+    await googleOauthSession();
+  };
+  useEffect(() => {
+    const fetchDetails = async () => {
+      const res = await getAccountDetails();
+      setAccountDetails(res);
+    };
+    fetchDetails();
+  }, []);
   return (
     <header
       className="bg-white "
@@ -30,33 +45,23 @@ const Nav = () => {
           <nav aria-label="Global" className="hidden md:block">
             <ul className="flex items-center gap-6 text-sm">
               <li>
-                <a
+                <Link
                   className="text-gray-500 transition hover:text-gray-500/75"
                   href="/"
                 >
                   {" "}
-                  About{" "}
-                </a>
+                  Home{" "}
+                </Link>
               </li>
 
               <li>
-                <a
+                <Link
                   className="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
+                  href="/myprofile"
                 >
                   {" "}
-                  Careers{" "}
-                </a>
-              </li>
-
-              <li>
-                <a
-                  className="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
-                >
-                  {" "}
-                  History{" "}
-                </a>
+                  Profile{" "}
+                </Link>
               </li>
 
               <li>
@@ -70,42 +75,51 @@ const Nav = () => {
               </li>
 
               <li>
-                <a
+                <Link
                   className="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
+                  href="/about"
                 >
                   {" "}
-                  Projects{" "}
-                </a>
+                  About Us{" "}
+                </Link>
               </li>
 
               <li>
-                <a
+                <Link
                   className="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
+                  href="/contact"
                 >
                   {" "}
-                  Blog{" "}
-                </a>
+                  Contact Us{" "}
+                </Link>
               </li>
             </ul>
           </nav>
 
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
-              <a
-                className="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700"
-                href="/"
+              {accountDetails.$id ? (
+                <div className="flex justify-center items-center space-x-2 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700">
+                  <p>{accountDetails.name.split(" ")[0]}</p>
+                </div>
+              ) : (
+                <button
+                  className=" flex justify-center items-center space-x-2 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700"
+                  onClick={handleGoogleSignIn}
+                >
+                  <FaGoogle />
+                  <span>Sign In</span>
+                </button>
+              )}
+              <Link
+                className=" justify-center items-center space-x-2 rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75
+          hidden lg:flex
+                "
+                href="/cart"
               >
-                Login
-              </a>
-
-              <a
-                className="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block"
-                href="/"
-              >
-                Register
-              </a>
+                <FaShoppingCart />
+                <span>Cart</span>
+              </Link>
             </div>
 
             <button className="block rounded bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">

@@ -17,8 +17,8 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Annoucments />
         <Nav />
-       
         {children}
+        <hr className="h-1 bg-teal-600" />
         <Footer />
       </body>
     </html>
