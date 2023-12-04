@@ -1,12 +1,12 @@
 "use client";
 import { getAccountDetails, deleteSession } from "@/app/appwrite/appwrite";
 import { useEffect, useState } from "react";
-import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 import { CiLogout } from "react-icons/ci";
 import { FaCircle } from "react-icons/fa";
 
 const UserProfile = () => {
-  const router = Router();
+  const router = useRouter();
   const [accountDetails, setAccountDetails] = useState({
     name: "",
     prefs: {

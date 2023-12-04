@@ -1,11 +1,12 @@
 "use client";
 import { googleOauthSession, getAccountDetails } from "@/app/appwrite/appwrite";
 import { FaGoogle, FaShoppingCart } from "react-icons/fa";
-
+import { RxHamburgerMenu } from "react-icons/rx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 const Nav = () => {
   const [accountDetails, setAccountDetails] = useState({});
+  // const [isLogedIn, setIsLogedIn] = useState(false);
   const handleGoogleSignIn = async () => {
     await googleOauthSession();
   };
@@ -14,6 +15,9 @@ const Nav = () => {
       const res = await getAccountDetails();
       setAccountDetails(res);
     };
+    // if (accountDetails.$id) {
+    //   setIsLogedIn(true);
+    // }
     fetchDetails();
   }, []);
   return (
@@ -98,19 +102,11 @@ const Nav = () => {
 
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
-              {accountDetails.$id ? (
-                <div className="flex justify-center items-center space-x-2 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700">
-                  <p>{accountDetails.name.split(" ")[0]}</p>
-                </div>
-              ) : (
-                <button
-                  className=" flex justify-center items-center space-x-2 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700"
-                  onClick={handleGoogleSignIn}
-                >
-                  <FaGoogle />
-                  <span>Sign In</span>
-                </button>
-              )}
+              <AuthComponent
+                authDetails={accountDetails}
+                handleGoogleSignIn={handleGoogleSignIn}
+              />
+
               <Link
                 className=" justify-center items-center space-x-2 rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75
           hidden lg:flex
@@ -123,26 +119,31 @@ const Nav = () => {
             </div>
 
             <button className="block rounded bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
-              <span className="sr-only">Toggle menu</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+              <RxHamburgerMenu />
             </button>
           </div>
         </div>
       </div>
     </header>
+  );
+};
+
+const AuthComponent = ({ authDetails, handleGoogleSignIn }) => {
+  if (authDetails && authDetails.$id) {
+    return (
+      <div className="flex justify-center items-center space-x-2 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700">
+        <p>{authDetails.name.split(" ")[0]}</p>
+      </div>
+    );
+  }
+  return (
+    <button
+      className=" flex justify-center items-center space-x-2 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700"
+      onClick={handleGoogleSignIn}
+    >
+      <FaGoogle />
+      <span>Sign In</span>
+    </button>
   );
 };
 
