@@ -4,9 +4,9 @@ import { FaGoogle, FaShoppingCart } from "react-icons/fa";
 import { RxHamburgerMenu } from "react-icons/rx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-const Nav = () => {
+const Nav = ({ setHamBurgerState }) => {
   const [accountDetails, setAccountDetails] = useState({});
-  // const [isLogedIn, setIsLogedIn] = useState(false);
+
   const handleGoogleSignIn = async () => {
     await googleOauthSession();
   };
@@ -15,9 +15,7 @@ const Nav = () => {
       const res = await getAccountDetails();
       setAccountDetails(res);
     };
-    // if (accountDetails.$id) {
-    //   setIsLogedIn(true);
-    // }
+
     fetchDetails();
   }, []);
   return (
@@ -71,10 +69,10 @@ const Nav = () => {
               <li>
                 <a
                   className="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
+              href="/cart"
                 >
                   {" "}
-                  Services{" "}
+                  Cart{" "}
                 </a>
               </li>
 
@@ -118,7 +116,10 @@ const Nav = () => {
               </Link>
             </div>
 
-            <button className="block rounded bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
+            <button
+              className="block rounded bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden"
+              onClick={() => setHamBurgerState((data) => !data)}
+            >
               <RxHamburgerMenu />
             </button>
           </div>

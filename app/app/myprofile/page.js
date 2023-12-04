@@ -77,7 +77,7 @@ const UserProfile = () => {
               {accountDetails.prefs.location}
             </h1>
           ) : (
-            <h2>India, Bengaluru</h2>
+            <h2  className="text-lg text-white font-semibold font-sans">India, Bengaluru</h2>
           )}
         </div>
 
