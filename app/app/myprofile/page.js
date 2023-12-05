@@ -2,17 +2,12 @@
 import { getAccountDetails, deleteSession } from "@/app/appwrite/appwrite";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CiLogout } from "react-icons/ci";
 import { FaCircle } from "react-icons/fa";
-
+import Image from "next/image";
+import AliaInSaree from "@/public/AliaInSaree.jpg";
 const UserProfile = () => {
   const router = useRouter();
-  const [accountDetails, setAccountDetails] = useState({
-    name: "",
-    prefs: {
-      location: "",
-    },
-  });
+  const [accountDetails, setAccountDetails] = useState(null);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -58,6 +53,18 @@ const UserProfile = () => {
     },
   ];
 
+  if (!accountDetails) {
+    return (
+      <div
+        className="flex  w-full items-center justify-center bg-white"
+        style={{ height: "80vh" }}
+      >
+        <h1 className="font-sans text-3xl text-teal-600 font-bold">
+          {"You haven't signed in"}
+        </h1>
+      </div>
+    );
+  }
   return (
     <div className="w-full flex flex-col ">
       <div
@@ -65,22 +72,13 @@ const UserProfile = () => {
         style={{ height: "25vh" }}
       >
         <div className="flex flex-col space-y-4 w-3/5 md:w-1/2">
-          {accountDetails.name ? (
-            <h1 className="text-3xl text-white font-semibold font-sans">
-              {accountDetails.name}
-            </h1>
-          ) : (
-            <h1>Guest User</h1>
-          )}
-          {accountDetails.prefs.location ? (
-            <h1 className="text-lg text-white font-semibold font-sans">
-              {accountDetails.prefs.location}
-            </h1>
-          ) : (
-            <h2  className="text-lg text-white font-semibold font-sans">India, Bengaluru</h2>
-          )}
+          <h1 className="text-3xl text-white font-semibold font-sans">
+            {accountDetails.name}
+          </h1>
+          <h1 className="text-lg text-white font-semibold font-sans">
+            Banglore India
+          </h1>
         </div>
-
         <div className="flex w-2/5 md:w-1/2 justify-end">
           {accountDetails ? (
             <div className="flex ">
@@ -114,14 +112,13 @@ const UserProfile = () => {
                       <p className="text-xs lg:text-lg font-semibold font-sans">
                         Order {data.orderId}
                       </p>
-                      {/* <p className="text-sm">VIEW ORDER</p> */}
                     </div>
                     <div className="flex justify-center items-center w-1/3">
                       <Status statusMessage={data.orderStatus} />
                     </div>
                     <div className="flex justify-center items-center w-1/3">
-                      <img
-                        src={data.orderImg}
+                      <Image
+                        src={AliaInSaree}
                         width={"80"}
                         height={"80"}
                         className="rounded-lg"
