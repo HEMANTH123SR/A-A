@@ -18,7 +18,7 @@ const AddProductForm = () => {
   const [multipleImages, setMultipleImages] = useState([]);
   const [color, setColor] = useState("");
   const handleSubmit = () => {
-    if (productName.length <= 5 || productName.length > 30) {
+    if (productName.length <= 5 || productName.length > 60) {
       setError(true);
 
       if (productName.length <= 5) {
@@ -30,7 +30,7 @@ const AddProductForm = () => {
       }
       return;
     }
-    if (productDescription.length <= 30 || productDescription.length > 300) {
+    if (productDescription.length <= 30 || productDescription.length > 500) {
       setError(true);
       if (productDescription.length <= 30) {
         setErrorMessage(

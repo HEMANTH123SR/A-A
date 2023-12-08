@@ -39,58 +39,52 @@ const deleteSession = async () => {
   }
 };
 
-function generateUniqueId() {
-  const timestamp = new Date().getTime();
-  const randomNumber = Math.floor(Math.random() * 1000000);
-  const uniqueId = `${timestamp.toString(16)}${randomNumber.toString(16)}`;
-  return uniqueId;
-}
-
 const createCoverImage = async (image) => {
   try {
     if (!image || !image instanceof File) {
       console.log(image);
       throw new Error("Invalid or missing image file");
     }
-
-    let id = generateUniqueId();
-   const res=await storage.createFile(
+    const res = await storage.createFile(
       process.env.NEXT_PUBLIC_COVER_IMAGE_STORAGE,
-      id,
+      ID.unique(),
       image
     );
-    console.log("appwrite cover image return value ",res);
-    return id;
+    console.log("appwrite cover image return value ", res);
+    return `https://cloud.appwrite.io/v1/storage/buckets/656eb430ce8aff9b7554/files/${res.$id}/preview?project=656aa2e6d65c98e96c84`;
   } catch (e) {
-    console.log("id ", id);
     console.log("appwrite :: error :: create cover image", e);
   }
 };
 
 const createMultipleProductImages = async (images) => {
   try {
-    let multipleIds = [generateUniqueId(), generateUniqueId(), generateUniqueId(), generateUniqueId()];
-    await storage.createFile(
+    const res1 = await storage.createFile(
       process.env.NEXT_PUBLIC_PRODUCT_IMAGE_STORAGE,
-      multipleIds[0],
+      ID.unique(),
       images[0]
     );
-    await storage.createFile(
+    const res2 = await storage.createFile(
       process.env.NEXT_PUBLIC_PRODUCT_IMAGE_STORAGE,
-      multipleIds[1],
+      ID.unique(),
       images[1]
     );
-    await storage.createFile(
+    const res3 = await storage.createFile(
       process.env.NEXT_PUBLIC_PRODUCT_IMAGE_STORAGE,
-      multipleIds[2],
+      ID.unique(),
       images[2]
     );
-    await storage.createFile(
+    const res4 = await storage.createFile(
       process.env.NEXT_PUBLIC_PRODUCT_IMAGE_STORAGE,
-      multipleIds[3],
+      ID.unique(),
       images[3]
     );
-    return multipleIds;
+    return [
+      `https://cloud.appwrite.io/v1/storage/buckets/656eb67e21c2fa4c3d8e/files/${res1.$id}/preview?project=656aa2e6d65c98e96c84`,
+      `https://cloud.appwrite.io/v1/storage/buckets/656eb67e21c2fa4c3d8e/files/${res2.$id}/preview?project=656aa2e6d65c98e96c84`,
+      `https://cloud.appwrite.io/v1/storage/buckets/656eb67e21c2fa4c3d8e/files/${res3.$id}/preview?project=656aa2e6d65c98e96c84`,
+      `https://cloud.appwrite.io/v1/storage/buckets/656eb67e21c2fa4c3d8e/files/${res4.$4id}/preview?project=656aa2e6d65c98e96c84`,
+    ];
   } catch (e) {
     console.log("appwrite :: error :: creat multiple prodcut images :: ", e);
   }
@@ -136,4 +130,22 @@ const createProduct = async (
   }
 };
 
-export { googleOauthSession, getAccountDetails, deleteSession, createProduct };
+const getImage = async () => {
+  try {
+    const res = await storage.getFilePreview(
+      process.env.NEXT_PUBLIC_COVER_IMAGE_STORAGE,
+      "18c47f3efa6ddf72"
+    );
+    console.log("appwrite getimage response", res);
+  } catch (e) {
+    console.log("appwrite getimage error", e);
+  }
+};
+
+export {
+  googleOauthSession,
+  getAccountDetails,
+  deleteSession,
+  createProduct,
+  getImage,
+};
