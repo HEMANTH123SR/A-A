@@ -39,23 +39,37 @@ const deleteSession = async () => {
   }
 };
 
+function generateUniqueId() {
+  const timestamp = new Date().getTime();
+  const randomNumber = Math.floor(Math.random() * 1000000);
+  const uniqueId = `${timestamp.toString(16)}${randomNumber.toString(16)}`;
+  return uniqueId;
+}
+
 const createCoverImage = async (image) => {
   try {
-    let id = ID.unique();
-    await storage.createFile(
+    if (!image || !image instanceof File) {
+      console.log(image);
+      throw new Error("Invalid or missing image file");
+    }
+
+    let id = generateUniqueId();
+   const res=await storage.createFile(
       process.env.NEXT_PUBLIC_COVER_IMAGE_STORAGE,
       id,
       image
     );
+    console.log("appwrite cover image return value ",res);
     return id;
   } catch (e) {
+    console.log("id ", id);
     console.log("appwrite :: error :: create cover image", e);
   }
 };
 
 const createMultipleProductImages = async (images) => {
   try {
-    let multipleIds = [ID.unique(), ID.unique(), ID.unique(), ID.unique()];
+    let multipleIds = [generateUniqueId(), generateUniqueId(), generateUniqueId(), generateUniqueId()];
     await storage.createFile(
       process.env.NEXT_PUBLIC_PRODUCT_IMAGE_STORAGE,
       multipleIds[0],
@@ -82,17 +96,24 @@ const createMultipleProductImages = async (images) => {
   }
 };
 
-const createProduct = async ({
+const createProduct = async (
   productName,
-  productPrice,
-  productPriceBeforeDiscount,
   productDescription,
-  colours,
-  fabrics,
+  currentPrice,
+  priceBeforeDiscount,
+  fabric,
+  color,
   coverImage,
-  productImages,
-  tags,
-}) => {
+  multipleImages
+) => {
+  console.log("productName", productName);
+  console.log("currentPrice", currentPrice);
+  console.log("priceBeforeDiscount", priceBeforeDiscount);
+  console.log("prodcutDescription", productDescription);
+  console.log("colour", color);
+  console.log("fabric", fabric);
+  console.log("cover image appwrite ", coverImage);
+  console.log("multiple images", multipleImages);
   try {
     await databases.createDocument(
       process.env.NEXT_PUBLIC_DATABASE_ID,
@@ -100,16 +121,16 @@ const createProduct = async ({
       ID.unique(),
       {
         name: productName,
-        currentPrice: productPrice,
-        priceBeforeDiscount: productPriceBeforeDiscount,
-        colours: colours,
+        currentPrice: currentPrice,
+        priceBeforeDiscount: priceBeforeDiscount,
+        colour: color,
         prodcutDescription: productDescription,
-        tags: tags,
-        fabric: fabrics,
+        fabric: fabric,
         coverImages: await createCoverImage(coverImage),
-        multipleSareeImages: await createMultipleProductImages(productImages),
+        multipleSareeImages: await createMultipleProductImages(multipleImages),
       }
     );
+    console.log("success");
   } catch (e) {
     console.log("appwrite :: error :: create prodcut ", e);
   }

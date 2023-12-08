@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/app/components/Footer";
@@ -15,14 +15,17 @@ const inter = Inter({ subsets: ["latin"] });
 // };
 
 export default function RootLayout({ children }) {
-  const [hamBurgerState,setHamBurgerState]=useState(true)
+  const [hamBurgerState, setHamBurgerState] = useState(false);
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Nav setHamBurgerState={setHamBurgerState}/>
+        <Nav setHamBurgerState={setHamBurgerState} />
         <div className="relative">
           {children}
-          <HamburgerMenu hamBurgerState={hamBurgerState} setHamBurgerState={setHamBurgerState}/>
+          <HamburgerMenu
+            hamBurgerState={hamBurgerState}
+            setHamBurgerState={setHamBurgerState}
+          />
         </div>
         <hr className="h-1 bg-teal-600" />
         <Footer />
