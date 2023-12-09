@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  createCoverImage,
-  createProduct,
-  createMultipleProductImages,
-} from "@/app/appwrite/appwrite";
+import { createProduct } from "@/app/appwrite/appwrite";
 const AddProductForm = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -400,6 +396,7 @@ const ProductPriceAndOtherDetailComponent = ({
                 setFabric(e.target.value);
               }}
             >
+              <option value="">Select Saree Fabric</option>
               <option value="cotton">Cotton</option>
               <option value="linen">Linen</option>
               <option value="silk">Silk</option>
@@ -409,9 +406,17 @@ const ProductPriceAndOtherDetailComponent = ({
               <option value="denim">Denim</option>
               <option value="velvet">Velvet</option>
               <option value="chiffon">Chiffon</option>
+              <option value="banarasi">Banarasi</option>
+              <option value="Satin">Satin</option>
             </select>
           </div>
-
+          <div className="p-2"></div>
+          <label
+            htmlFor="colour"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
+            Colour
+          </label>
           <div className="mt-2">
             <select
               id="colour"

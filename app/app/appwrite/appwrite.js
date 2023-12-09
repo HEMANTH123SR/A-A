@@ -1,4 +1,4 @@
-import { Client, Account, ID, Databases, Storage } from "appwrite";
+import { Client, Account, ID, Databases, Storage, Query } from "appwrite";
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -36,6 +36,18 @@ const deleteSession = async () => {
     await account.deleteSessions();
   } catch (e) {
     console.log("appwrite :: delete session :: error ", e);
+  }
+};
+
+const getProducts = async () => {
+  try {
+    const res = await databases.listDocuments(
+      process.env.NEXT_PUBLIC_DATABASE_ID,
+      process.env.NEXT_PUBLIC_COLLECTION_ID);
+    console.log("appwrite :: success :: get products ", res);
+    return res;
+  } catch (e) {
+    console.log("appwrite :: error :: get products", e);
   }
 };
 
@@ -148,4 +160,5 @@ export {
   deleteSession,
   createProduct,
   getImage,
+  getProducts,
 };
