@@ -1,31 +1,87 @@
 "use client";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { getProduct } from "@/app/appwrite/appwrite";
+import { useRouter } from "next/navigation";
+import {
+  getProduct,
+  getAccountDetails,
+  deleteProduct,
+  deleteCoverImages,
+} from "@/app/appwrite/appwrite";
+
 const Product = ({ params }) => {
+  const Router = useRouter();
   const [prodcut, setProduct] = useState({});
   const [isProductFetched, setIsProductFetched] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const res = await getProduct(params.id);
-        console.log(res);
+        const res2 = await getAccountDetails();
+
         if (res.$id) {
           setProduct(res);
+          setUserDetails(res2);
           setIsProductFetched(true);
         }
       } catch (e) {
         console.log("page.js :: product :: error", e);
       }
     };
+
     fetchProduct();
   }, []);
+
+  const deleteHandler = async () => {
+    try {
+      const res = await deleteProduct(
+        prodcut.$id,
+        prodcut.multipleSareeImages,
+        prodcut.coverImages
+      );
+
+      if (res) {
+        Router.push("/");
+      }
+    } catch (e) {
+      console.log("profile  page.js :: appwrite :: error ", e);
+    }
+  };
   if (!isProductFetched) {
-    return <div>hhhhahhahhahhahah</div>;
+    return (
+      <div
+        style={{ height: "90vh" }}
+        className="bg-white flex justify-center items-center"
+      >
+        <div className="flex justify-center items-center h-screen">
+          <div className="relative inline-flex">
+            <div className="w-8 h-8 bg-blue-500 rounded-full"></div>
+            <div className="w-8 h-8 bg-blue-500 rounded-full absolute top-0 left-0 animate-ping"></div>
+            <div className="w-8 h-8 bg-blue-500 rounded-full absolute top-0 left-0 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-4 md:px-8 2xl:px-16 bg-white">
+        {userDetails.labels[0] == "admin" ? (
+          <div className="flex justify-between items-center pt-7">
+            <button
+              className="bg-teal-600  text-white font-sans h-10 w-24 rounded-md flex justify-center items-center text-lg font-semibold"
+              onClick={deleteHandler}
+            >
+              delete
+            </button>
+            <button className="bg-teal-600 p-4 text-white font-sans h-10 w-24 rounded-md flex justify-center items-center text-lg font-semibold">
+              edit
+            </button>
+          </div>
+        ) : (
+          <div></div>
+        )}
         <div className="pt-8">
           <div className="flex items-center">
             <ol className="flex w-full items-center overflow-hidden">

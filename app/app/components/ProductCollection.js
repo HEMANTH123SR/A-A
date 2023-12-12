@@ -31,7 +31,9 @@ const ProductCollection = () => {
   const [maxPriceRange, setMaxPriceRange] = useState(20000);
   const [selecetdFabricInNumbers, setSelecetdFabricInNumbers] = useState(0);
   const [selecetdColorInNumbers, setSelecetdColorInNumbers] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(false);
     const fabricArray = Object.keys(fabrics).filter(
       (fabric) => fabrics[fabric]
     );
@@ -47,10 +49,16 @@ const ProductCollection = () => {
         maxPriceRange
       );
       setProducts(response);
+      setIsLoading(true);
     };
 
     fetchProducts();
-  }, []);
+  }, [
+    selecetdColorInNumbers,
+    selecetdFabricInNumbers,
+    minPriceRange,
+    maxPriceRange,
+  ]);
 
   useEffect(() => {
     let counter = 0;
@@ -102,6 +110,22 @@ const ProductCollection = () => {
     setMinPriceRange(300);
     setMaxPriceRange(20000);
   };
+  if (!isLoading) {
+    return (
+      <div
+        className="bg-white flex justify-center items-center"
+        style={{ height: "90vh" }}
+      >
+        <div className="flex justify-center items-center h-screen">
+          <div className="relative inline-flex">
+            <div className="w-8 h-8 bg-blue-500 rounded-full"></div>
+            <div className="w-8 h-8 bg-blue-500 rounded-full absolute top-0 left-0 animate-ping"></div>
+            <div className="w-8 h-8 bg-blue-500 rounded-full absolute top-0 left-0 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <section>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
