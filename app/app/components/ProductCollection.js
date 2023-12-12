@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { getProducts } from "@/app/appwrite/appwrite";
+import Link from "next/link";
+
 const ProductCollection = () => {
   const [products, setProducts] = useState({});
   const [fabrics, setFabrics] = useState({
-    cotton: false,
-    linen: false,
-    silk: false,
-    wool: false,
-    polyester: false,
-    rayon: false,
-    denim: false,
-    velvet: false,
-    chiffon: false,
-    banarasi: false,
-    satin: false,
+    cotton: true,
+    linen: true,
+    silk: true,
+    wool: true,
+    polyester: true,
+    rayon: true,
+    denim: true,
+    velvet: true,
+    chiffon: true,
+    banarasi: true,
+    satin: true,
   });
   const [color, setColor] = useState({
-    red: false,
-    blue: false,
-    green: false,
-    yellow: false,
-    pink: false,
-    purple: false,
-    orange: false,
+    red: true,
+    blue: true,
+    green: true,
+    yellow: true,
+    pink: true,
+    purple: true,
+    orange: true,
   });
 
   const [minPriceRange, setMinPriceRange] = useState(300);
@@ -30,8 +32,20 @@ const ProductCollection = () => {
   const [selecetdFabricInNumbers, setSelecetdFabricInNumbers] = useState(0);
   const [selecetdColorInNumbers, setSelecetdColorInNumbers] = useState(0);
   useEffect(() => {
+    const fabricArray = Object.keys(fabrics).filter(
+      (fabric) => fabrics[fabric]
+    );
+    const colorArray = Object.keys(color).filter(
+      (colorName) => color[colorName]
+    );
+
     const fetchProducts = async () => {
-      const response = await getProducts();
+      const response = await getProducts(
+        colorArray,
+        fabricArray,
+        minPriceRange,
+        maxPriceRange
+      );
       setProducts(response);
     };
 
@@ -59,31 +73,35 @@ const ProductCollection = () => {
 
   const resetFabrics = () => {
     setFabrics({
-      cotton: false,
-      linen: false,
-      silk: false,
-      wool: false,
-      polyester: false,
-      rayon: false,
-      denim: false,
-      velvet: false,
-      chiffon: false,
-      banarasi: false,
-      satin: false,
+      cotton: true,
+      linen: true,
+      silk: true,
+      wool: true,
+      polyester: true,
+      rayon: true,
+      denim: true,
+      velvet: true,
+      chiffon: true,
+      banarasi: true,
+      satin: true,
     });
   };
 
-  const resetColors=()=>{
+  const resetColors = () => {
     setColor({
-      red: false,
-      blue: false,
-      green: false,
-      yellow: false,
-      pink: false,
-      purple: false,
-      orange: false,
-    })
-  }
+      red: true,
+      blue: true,
+      green: true,
+      yellow: true,
+      pink: true,
+      purple: true,
+      orange: true,
+    });
+  };
+  const resetPriceRange = () => {
+    setMinPriceRange(300);
+    setMaxPriceRange(20000);
+  };
   return (
     <section>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -99,7 +117,7 @@ const ProductCollection = () => {
           </p>
         </header>
 
-        <div className="mt-8 block lg:hidden">
+        {/* <div className="mt-8 block lg:hidden">
           <button className="flex cursor-pointer items-center gap-2 border-b border-gray-400 pb-1 text-gray-900 transition hover:border-gray-600">
             <span className="text-sm font-medium"> Filters & Sorting </span>
 
@@ -118,10 +136,10 @@ const ProductCollection = () => {
               />
             </svg>
           </button>
-        </div>
+        </div> */}
 
         <div className="mt-4 lg:mt-8 lg:grid lg:grid-cols-4 lg:items-start lg:gap-8">
-          <div className="hidden space-y-4 lg:block">
+          <div className="p-4 space-y-4 lg:block">
             <div>
               <p className="block text-xs font-medium text-gray-700">Filters</p>
 
@@ -174,6 +192,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="cotton"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.cotton}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, cotton: !prev.cotton };
@@ -196,6 +215,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="linen"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.linen}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, linen: !prev.linen };
@@ -218,6 +238,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="silk"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.silk}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, silk: !prev.silk };
@@ -240,6 +261,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="wool"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.wool}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, wool: !prev.wool };
@@ -262,6 +284,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="polyester"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.polyester}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, polyester: !prev.polyester };
@@ -284,6 +307,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="denim"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.denim}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, denim: !prev.denim };
@@ -306,6 +330,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="velvet"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.velvet}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, velvet: !prev.velvet };
@@ -328,6 +353,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="chiffon"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.chiffon}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, chiffon: !prev.chiffon };
@@ -350,6 +376,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="banarasi"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.banarasi}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, banarasi: !prev.banarasi };
@@ -372,6 +399,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="satin"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.satin}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, satin: !prev.satin };
@@ -394,6 +422,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="rayon"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={fabrics.rayon}
                             onClick={() => {
                               setFabrics((prev) => {
                                 return { ...prev, rayon: !prev.rayon };
@@ -437,13 +466,13 @@ const ProductCollection = () => {
                     <header className="flex items-center justify-between p-4">
                       <span className="text-sm text-gray-700">
                         {" "}
-                        The highest price is $600{" "}
+                        The highest price is ₹20000{" "}
                       </span>
 
                       <button
                         type="button"
                         className="text-sm text-gray-900 underline underline-offset-4"
-                        onClick={resetColors}
+                        onClick={resetPriceRange}
                       >
                         Reset
                       </button>
@@ -455,13 +484,17 @@ const ProductCollection = () => {
                           htmlFor="FilterPriceFrom"
                           className="flex items-center gap-2"
                         >
-                          <span className="text-sm text-gray-600">$</span>
+                          <span className="text-sm text-gray-600">₹</span>
 
                           <input
                             type="number"
                             id="FilterPriceFrom"
                             placeholder="From"
                             className="w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                            value={minPriceRange}
+                            onChange={(e) => {
+                              setMinPriceRange(e.target.value);
+                            }}
                           />
                         </label>
 
@@ -469,13 +502,17 @@ const ProductCollection = () => {
                           htmlFor="FilterPriceTo"
                           className="flex items-center gap-2"
                         >
-                          <span className="text-sm text-gray-600">$</span>
+                          <span className="text-sm text-gray-600">₹</span>
 
                           <input
                             type="number"
                             id="FilterPriceTo"
                             placeholder="To"
                             className="w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                            value={maxPriceRange}
+                            onChange={(e) => {
+                              setMaxPriceRange(e.target.value);
+                            }}
                           />
                         </label>
                       </div>
@@ -515,6 +552,7 @@ const ProductCollection = () => {
                       <button
                         type="button"
                         className="text-sm text-gray-900 underline underline-offset-4"
+                        onClick={resetColors}
                       >
                         Reset
                       </button>
@@ -530,6 +568,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="FilterRed"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={color.red}
                             onClick={() => {
                               setColor((prev) => {
                                 return { ...prev, red: !prev.red };
@@ -553,6 +592,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="FilterBlue"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={color.blue}
                             onClick={() => {
                               setColor((prev) => {
                                 return { ...prev, blue: !prev.blue };
@@ -576,6 +616,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="FilterGreen"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={color.green}
                             onClick={() => {
                               setColor((prev) => {
                                 return { ...prev, green: !prev.green };
@@ -599,6 +640,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="FilterOrange"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={color.orange}
                             onClick={() => {
                               setColor((prev) => {
                                 return { ...prev, orange: !prev.orange };
@@ -622,6 +664,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="FilterPurple"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={color.purple}
                             onClick={() => {
                               setColor((prev) => {
                                 return { ...prev, purple: !prev.purple };
@@ -645,6 +688,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="FilterPink"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={color.pink}
                             onClick={() => {
                               setColor((prev) => {
                                 return { ...prev, pink: !prev.pink };
@@ -667,6 +711,7 @@ const ProductCollection = () => {
                             type="checkbox"
                             id="FilterYellow"
                             className="h-5 w-5 rounded border-gray-300"
+                            checked={color.yellow}
                             onClick={() => {
                               setColor((prev) => {
                                 return { ...prev, yellow: !prev.yellow };
@@ -693,7 +738,10 @@ const ProductCollection = () => {
                 products?.documents?.map((data) => {
                   return (
                     <li key={data.$id}>
-                      <a href="#" className="group block overflow-hidden">
+                      <Link
+                        href={`/product/${data.$id}`}
+                        className="group block overflow-hidden"
+                      >
                         <img
                           src={data.coverImages}
                           alt=""
@@ -714,7 +762,7 @@ const ProductCollection = () => {
                             </span>
                           </p>
                         </div>
-                      </a>
+                      </Link>
                     </li>
                   );
                 })

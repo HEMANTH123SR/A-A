@@ -39,15 +39,42 @@ const deleteSession = async () => {
   }
 };
 
-const getProducts = async () => {
+const getProducts = async (
+  colorArray,
+  fabricArray,
+  minPriceRange,
+  maxPriceRange
+) => {
+  console.log(colorArray);
+  console.log(fabricArray);
   try {
     const res = await databases.listDocuments(
       process.env.NEXT_PUBLIC_DATABASE_ID,
-      process.env.NEXT_PUBLIC_COLLECTION_ID);
+      process.env.NEXT_PUBLIC_COLLECTION_ID,
+      [
+        // Query.select(["currentPrice", "coverImages", "name","$id"]),
+        Query.equal("colour", [colorArray]),
+        Query.equal("fabric", [fabricArray]),
+      ]
+    );
     console.log("appwrite :: success :: get products ", res);
     return res;
   } catch (e) {
     console.log("appwrite :: error :: get products", e);
+  }
+};
+
+const getProduct = async (id) => {
+  try {
+    const res = await databases.getDocument(
+      process.env.NEXT_PUBLIC_DATABASE_ID,
+      process.env.NEXT_PUBLIC_COLLECTION_ID,
+      id
+    );
+    console.log("appwrite :: success :: get product ", res);
+    return res;
+  } catch (e) {
+    console.log("appwrite :: error :: get product", e);
   }
 };
 
@@ -161,4 +188,5 @@ export {
   createProduct,
   getImage,
   getProducts,
+  getProduct,
 };
