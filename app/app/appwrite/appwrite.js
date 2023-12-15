@@ -8,6 +8,7 @@ const client = new Client()
 const account = new Account(client);
 const databases = new Databases(client);
 const storage = new Storage(client);
+
 const googleOauthSession = async () => {
   try {
     const res = await account.createOAuth2Session(
@@ -237,6 +238,44 @@ const getImage = async () => {
   }
 };
 
+const addCartProduct = async (userId, productId) => {
+  try {
+    await databases.createDocument(
+      process.env.NEXT_PUBLIC_DATABASE_ID,
+      process.env.NEXT_PUBLIC_APPWRITE_CARTCOLLECTION_ID,
+      ID.unique(),
+      {
+        userId,
+        productId,
+      }
+    );
+    return true;
+  } catch (e) {
+    console.log("appwrite :: add card product :: error", e);
+    return false;
+  }
+};
+
+const getCartDetails = async (userId) => {
+  try {
+    const cartRes = await databases.listDocuments(
+      process.env.NEXT_PUBLIC_DATABASE_ID,
+      process.env.NEXT_PUBLIC_APPWRITE_CARTCOLLECTION_ID,
+      [Query.equal("userId", [userId])]
+    );
+    const productCartArray = cartRes.documents.map((data) => {
+      return data.productId;
+    });
+    return await databases.listDocuments(
+      process.env.NEXT_PUBLIC_DATABASE_ID,
+      process.env.NEXT_PUBLIC_COLLECTION_ID,
+      [Query.equal("$id", productCartArray)]
+    );
+  } catch (e) {
+    console.log("appwrite :: get cart details :: error", e);
+  }
+};
+
 export {
   googleOauthSession,
   getAccountDetails,
@@ -246,35 +285,6 @@ export {
   getProducts,
   getProduct,
   deleteProduct,
+  addCartProduct,
+  getCartDetails,
 };
-
-
-// const editProduct = async (
-//   id,
-//   productName,
-//   productDescription,
-//   currentPrice,
-//   priceBeforeDiscount,
-//   fabric,
-//   color,
-//   coverImage,
-//   multipleImages
-// ) => {
-//   try {
-//     await databases.updateDocument(
-//       process.env.NEXT_PUBLIC_DATABASE_ID,
-//       process.env.NEXT_PUBLIC_COLLECTION_ID,
-//       id,
-//       {
-//         name: productName,
-//         currentPrice: currentPrice,
-//         priceBeforeDiscount: priceBeforeDiscount,
-//         colour: color,
-//         prodcutDescription: productDescription,
-//         fabric: fabric,
-//         coverImages: await deleteCoverImages(coverImage),
-//         multipleSareeImages: await createMultipleProductImages(multipleImages),
-//       }
-//     );
-//   } catch (e) {}
-// };

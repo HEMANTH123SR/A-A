@@ -5,7 +5,7 @@ import {
   getProduct,
   getAccountDetails,
   deleteProduct,
-  deleteCoverImages,
+  addCartProduct,
 } from "@/app/appwrite/appwrite";
 
 const Product = ({ params }) => {
@@ -13,6 +13,8 @@ const Product = ({ params }) => {
   const [prodcut, setProduct] = useState({});
   const [isProductFetched, setIsProductFetched] = useState(false);
   const [userDetails, setUserDetails] = useState({});
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -47,6 +49,15 @@ const Product = ({ params }) => {
       console.log("profile  page.js :: appwrite :: error ", e);
     }
   };
+  const handleCart = async () => {
+    if (userDetails?.$id) {
+      const res = await addCartProduct(userDetails.$id, prodcut.$id);
+      setSuccess(res);
+    } else {
+      setError(true);
+    }
+  };
+
   if (!isProductFetched) {
     return (
       <div
@@ -67,16 +78,13 @@ const Product = ({ params }) => {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-4 md:px-8 2xl:px-16 bg-white">
-        {userDetails.labels[0] == "admin" ? (
-          <div className="flex justify-between items-center pt-7">
+        {userDetails?.labels[0] == "admin" ? (
+          <div className="flex justify-center items-center pt-7">
             <button
               className="bg-teal-600  text-white font-sans h-10 w-24 rounded-md flex justify-center items-center text-lg font-semibold"
               onClick={deleteHandler}
             >
               delete
-            </button>
-            <button className="bg-teal-600 p-4 text-white font-sans h-10 w-24 rounded-md flex justify-center items-center text-lg font-semibold">
-              edit
             </button>
           </div>
         ) : (
@@ -153,24 +161,25 @@ const Product = ({ params }) => {
                 </ul>
               </div>
             </div>
-            <div className="space-s-4 3xl:pr-48 flex items-center gap-2 border-b border-gray-300 py-8  md:pr-32 lg:pr-12 2xl:pr-32">
-              <div className="group flex h-11 flex-shrink-0 items-center justify-between overflow-hidden rounded-md border border-gray-300 md:h-12">
-                <button
-                  className="text-heading hover:bg-heading flex h-full w-10 flex-shrink-0 items-center justify-center border-e border-gray-300 transition duration-300 ease-in-out focus:outline-none md:w-12"
-                  disabled
-                >
-                  +
-                </button>
-                <span className="duration-250 text-heading flex h-full w-12  flex-shrink-0 cursor-default items-center justify-center text-base font-semibold transition-colors ease-in-out  md:w-20 xl:w-24">
-                  1
-                </span>
-                <button className="text-heading hover:bg-heading flex h-full w-10 flex-shrink-0 items-center justify-center border-s border-gray-300 transition duration-300 ease-in-out focus:outline-none md:w-12">
-                  -
-                </button>
-              </div>
+            <div className="space-s-4 3xl:pr-48 flex flex-col items-center justify-between gap-2 border-b border-gray-300 py-8  md:pr-32 lg:pr-12 2xl:pr-32">
+              {error ? (
+                <p className="text-red-500 font-sans text-base text-center font-bold">
+                  Please log in first
+                </p>
+              ) : (
+                <></>
+              )}
+              {success ? (
+                <p className="text-green-500 font-sans text-base text-center font-bold">
+                  Add to cart successful
+                </p>
+              ) : (
+                <></>
+              )}
               <button
                 type="button"
                 className="h-11 w-full rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                onClick={handleCart}
               >
                 Add to cart
               </button>

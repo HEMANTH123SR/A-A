@@ -1,6 +1,7 @@
-import { Heart, Trash } from "lucide-react";
-import React from "react";
-
+"use client";
+import { Trash } from "lucide-react";
+import React, { useEffect } from "react";
+import { getCartDetails } from "@/app/appwrite/appwrite";
 const products = [
   {
     id: 1,
@@ -41,6 +42,9 @@ const products = [
 ];
 
 const Cart = () => {
+  useEffect(() => {
+    getCartDetails("656b62efc0827714cebf");
+  });
   return (
     <div className="mx-auto max-w-7xl px-2 lg:px-0 bg-white xl:px-10">
       <div className="mx-auto max-w-2xl py-8 lg:max-w-7xl">
