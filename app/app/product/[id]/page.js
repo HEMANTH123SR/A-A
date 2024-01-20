@@ -51,7 +51,14 @@ const Product = ({ params }) => {
   };
   const handleCart = async () => {
     if (userDetails?.$id) {
-      const res = await addCartProduct(userDetails.$id, prodcut.$id);
+      const res = await addCartProduct(
+        userDetails.$id,
+        prodcut.$id,
+        prodcut.name,
+        prodcut.currentPrice,
+        prodcut.colour,
+        prodcut.coverImages
+      );
       setSuccess(res);
     } else {
       setError(true);

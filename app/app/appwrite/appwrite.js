@@ -1,5 +1,5 @@
 import { Client, Account, ID, Databases, Storage, Query } from "appwrite";
-import { data } from "autoprefixer";
+
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -238,8 +238,21 @@ const getImage = async () => {
   }
 };
 
-const addCartProduct = async (userId, productId) => {
+const addCartProduct = async (
+  userId,
+  productId,
+  name,
+  currentPrice,
+  colour,
+  coverImage
+) => {
   try {
+    // const cartRes = await databases.listDocuments(
+    //   process.env.NEXT_PUBLIC_DATABASE_ID,
+    //   process.env.NEXT_PUBLIC_APPWRITE_CARTCOLLECTION_ID,
+    //   [Query.equal("productId", [userId])]
+    // );
+    // if (cartRes.documents.length < 1) {}
     await databases.createDocument(
       process.env.NEXT_PUBLIC_DATABASE_ID,
       process.env.NEXT_PUBLIC_APPWRITE_CARTCOLLECTION_ID,
@@ -247,8 +260,13 @@ const addCartProduct = async (userId, productId) => {
       {
         userId,
         productId,
+        name,
+        currentPrice,
+        colour,
+        coverImage,
       }
     );
+
     return true;
   } catch (e) {
     console.log("appwrite :: add card product :: error", e);
@@ -258,21 +276,25 @@ const addCartProduct = async (userId, productId) => {
 
 const getCartDetails = async (userId) => {
   try {
-    const cartRes = await databases.listDocuments(
+    return await databases.listDocuments(
       process.env.NEXT_PUBLIC_DATABASE_ID,
       process.env.NEXT_PUBLIC_APPWRITE_CARTCOLLECTION_ID,
       [Query.equal("userId", [userId])]
     );
-    const productCartArray = cartRes.documents.map((data) => {
-      return data.productId;
-    });
-    return await databases.listDocuments(
-      process.env.NEXT_PUBLIC_DATABASE_ID,
-      process.env.NEXT_PUBLIC_COLLECTION_ID,
-      [Query.equal("$id", productCartArray)]
-    );
   } catch (e) {
     console.log("appwrite :: get cart details :: error", e);
+  }
+};
+
+const removeChart = async (id) => {
+  try {
+    await databases.deleteDocument(
+      process.env.NEXT_PUBLIC_DATABASE_ID,
+      process.env.NEXT_PUBLIC_APPWRITE_CARTCOLLECTION_ID,
+      id
+    );
+  } catch (e) {
+    console.log("appwrite :: remove chart :: error", e);
   }
 };
 
@@ -287,4 +309,5 @@ export {
   deleteProduct,
   addCartProduct,
   getCartDetails,
+  removeChart,
 };
