@@ -12,8 +12,8 @@ const googleOauthSession = async () => {
   try {
     const res = await account.createOAuth2Session(
       "google",
-      "http://localhost:3000/",
-      "http://localhost:3000/sign-in-again"
+      "https://a-a-gray.vercel.app/",
+      "https://a-a-gray.vercel.app/sign-in-again"
     );
     console.log("appwrite :: google oauth session :: res", res);
   } catch (e) {
