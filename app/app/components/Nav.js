@@ -138,7 +138,12 @@ const Nav = ({ setHamBurgerState }) => {
 
             <div className="flex items-center gap-4">
               <div className="sm:flex sm:gap-4">
-                <Link href={"/search"}>
+                <Link
+                  href={"/search"}
+                  className=" justify-center items-center space-x-2 rounded-md  px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75
+                   flex
+                        "
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
