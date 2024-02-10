@@ -141,7 +141,7 @@ const Nav = ({ setHamBurgerState }) => {
                 <Link
                   href={"/search"}
                   className=" justify-center items-center space-x-2 rounded-md  px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75
-                   flex
+                   hidden lg:flex
                         "
                 >
                   <svg
