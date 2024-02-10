@@ -1,6 +1,5 @@
 import { Client, Account, ID, Databases, Storage, Query } from "appwrite";
 
-
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
@@ -79,6 +78,19 @@ const getProduct = async (id) => {
     return res;
   } catch (e) {
     console.log("appwrite :: error :: get product", e);
+  }
+};
+
+const getSearchProducts = async (search) => {
+  try {
+    const res = await databases.listDocuments(
+      process.env.NEXT_PUBLIC_DATABASE_ID,
+      process.env.NEXT_PUBLIC_COLLECTION_ID,
+      [Query.startsWith("name", search)]
+    );
+    return res;
+  } catch (err) {
+    console.log("appwrite :: error :: getsearchproducts", e);
   }
 };
 
@@ -163,6 +175,7 @@ const createCoverImage = async (image) => {
 };
 
 const createMultipleProductImages = async (images) => {
+  console.log(images);
   try {
     const res1 = await storage.createFile(
       process.env.NEXT_PUBLIC_PRODUCT_IMAGE_STORAGE,
@@ -306,6 +319,7 @@ export {
   getImage,
   getProducts,
   getProduct,
+  getSearchProducts,
   deleteProduct,
   addCartProduct,
   getCartDetails,

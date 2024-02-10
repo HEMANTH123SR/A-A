@@ -25,3 +25,45 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+#google_translate_element select {
+  background-color: #f3f4f6;
+  color: #0d9488;
+  border: none;
+  border-radius: 3px;
+  padding: 6px 8px;
+}
+
+.goog-logo-link {
+  display: none !important;
+}
+.goog-te-gadget {
+  color: transparent !important;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+#google_translate_element span {
+  display: none;
+}
+
+/* SearchPage.css */
+.custom-placeholder::placeholder {
+  color: black; /* Set the placeholder text color to black */
+}
+
+.no-border {
+  border: none; /* Remove the border */
+  outline: none; /* Remove the outline when focused */
+}
